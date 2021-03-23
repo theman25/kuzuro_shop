@@ -30,7 +30,7 @@ public class MemberVO {
 	private String userAddr1;
 	private String userAddr2;
 	private String userAddr3;
-	private Date regDate;
+	private Date regiDate;
 	private int verify;
 	
 }
