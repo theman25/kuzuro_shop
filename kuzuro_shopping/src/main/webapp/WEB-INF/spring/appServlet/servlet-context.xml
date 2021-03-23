@@ -23,4 +23,13 @@
 	
 	<context:component-scan base-package="com.kuzuro.shop" />
 	
+	<!-- admin interceptor -->
+	<beans:bean id="AdminInterceptor" class="com.kuzuro.shop.interceptor.AdminInterceptor" />
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<beans:ref bean="AdminInterceptor" />
+		</interceptor>
+	</interceptors>
 </beans:beans>
