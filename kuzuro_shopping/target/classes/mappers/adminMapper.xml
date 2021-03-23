@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kuzuro.shop.mappers.adminMapper">
+	
+	<!-- 카테고리 호출 -->
+	<select id="category" resultType="com.kuzuro.shop.admin.domain.CategoryVO">
+		WITH recursive cte AS
+		(
+			SELECT 	1 as level, cateName, cateCode, cateCodeRef
+			FROM 		tbl_goods_category
+			WHERE 	cateCodeRef IS NULL
+			UNION ALL 
+			SELECT 1 + level AS level, p.cateName, p.cateCode, p.cateCodeRef
+			FROM tbl_goods_category p
+			INNER JOIN cte ON p.cateCodeRef = cte.cateCode
+		)
+		SELECT 	level, cateName, cateCode, cateCodeRef
+		FROM 		cte
+		ORDER BY level, cateCode
+	</select>
+	
+</mapper>
+

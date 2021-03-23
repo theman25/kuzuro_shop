@@ -1,4 +1,4 @@
-package com.kuzuro.shop.member.domain;
+package com.kuzuro.shop.admin.domain;
 
 import java.util.Date;
 
