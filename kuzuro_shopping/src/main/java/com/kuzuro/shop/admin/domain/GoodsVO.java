@@ -29,6 +29,7 @@ public class GoodsVO {
 	private int gdsStock;
 	private String gdsDes;
 	private String gdsImg;
+	private String gdsThumbImg;
 	private Date gdsDate;
 	
 }

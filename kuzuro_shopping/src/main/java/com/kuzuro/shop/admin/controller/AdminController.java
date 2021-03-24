@@ -1,7 +1,9 @@
 package com.kuzuro.shop.admin.controller;
 
+import java.io.File;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -11,11 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kuzuro.shop.admin.domain.CategoryVO;
 import com.kuzuro.shop.admin.domain.GoodsVO;
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.admin.service.AdminService;
+import com.kuzuro.shop.utils.UploadFileUtils;
 
 import net.sf.json.JSONArray;
 
@@ -27,6 +31,9 @@ public class AdminController {
 	
 	@Inject
 	AdminService adminService;
+	
+	@Resource(name="uploadPath")
+	private String uploadPath;
 	
 	// 관리자 화면
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -45,13 +52,36 @@ public class AdminController {
 	}
 	
 	// 상품등록 post
+	//@RequestMapping(value = "/goods/register", method = RequestMethod.POST)
+	//public String postGoodsRegister(GoodsVO vo) throws Exception {
+	//	logger.info("postGoodsRegister");
+	//	adminService.register(vo);
+	//	return "redirect:/admin/index";
+	//}
+	
+	// 상품등록 + 이미지 post
 	@RequestMapping(value = "/goods/register", method = RequestMethod.POST)
-	public String postGoodsRegister(GoodsVO vo) throws Exception {
+	public String postGoodsRegister(GoodsVO vo, MultipartFile file) throws Exception {
+		logger.info("postGoodsRegister");
+		
+		String imgUploadPath = uploadPath + File.separator + "imgUpload";
+		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);
+		String fileName = null;
+		
+		if(file != null) {
+			fileName = UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
+		} else {
+			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
+		}
+		
+		vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
+		vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
+		
 		adminService.register(vo);
 		
 		return "redirect:/admin/index";
 	}
-	
+		
 	// 상품목록 get
 	@RequestMapping(value = "/goods/list", method = RequestMethod.GET)
 	public void getGoodsList(Model model) throws Exception {

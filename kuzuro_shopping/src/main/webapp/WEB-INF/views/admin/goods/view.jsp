@@ -42,6 +42,9 @@
 		label[for='gdsDes'] { display:block; }
 		input { width:150px; }
 		textarea#gdsDes { width:400px; height:180px; }
+		
+		.oriImg { width:500px; height:auto;}
+		.thumbImg {}
 	</style>
 </head>
 
@@ -92,6 +95,14 @@
 				<div class="inputArea">
 					<label for="gdsDes">상품소개</label>
 					<span>${goods.gdsDes}</span>
+				</div>
+				<div class="inputArea">
+					<label for="gdsImg">이미지</label>
+					<p>원본 이미지</p>
+					<img src="${goods.gdsImg}" />
+					
+					<p>썸네일</p>
+					<img src="${goods.gdsThumbImg}" />
 				</div>
 				<div class="inputArea">
 					<button type="submit" id="btnModify" class="btn btn-warning">수정</button>
