@@ -25,12 +25,12 @@
 
 					<div class="input_area">
 						<label for="userId">아이디</label>
-						<input type="email" id="userId" name="userId" required="required" />
+						<input type="email" id="userId" name="userId" required="required" value="@email.com"/>
 					</div>
 
 					<div class="input_area">
 						<label for="userPass">패스워드</label>
-						<input type="password" id="userPass" name="userPass" required="required" />
+						<input type="password" id="userPass" name="userPass" required="required" value="0000"/>
 					</div>
 
 					<button type="submit" id="btnSignin" name="btnSignin">로그인</button>

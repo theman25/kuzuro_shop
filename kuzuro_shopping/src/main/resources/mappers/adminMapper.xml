@@ -20,5 +20,12 @@
 		ORDER BY level, cateCode
 	</select>
 	
+	<!-- 상품 등록 -->
+	<insert id="register">
+		INSERT INTO tbl_goods 
+				(gdsName, cateCode, gdsPrice, gdsStock, gdsDes)
+		VALUES 	(#{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsStock}, #{gdsDes});
+	</insert>
+	
 </mapper>
 

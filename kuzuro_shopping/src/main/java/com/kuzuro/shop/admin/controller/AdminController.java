@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.kuzuro.shop.admin.domain.CategoryVO;
+import com.kuzuro.shop.admin.domain.GoodsVO;
 import com.kuzuro.shop.admin.service.AdminService;
 
 import net.sf.json.JSONArray;
@@ -31,7 +32,7 @@ public class AdminController {
 		logger.info("getIndex");
 	}
 	
-	// 상품 등록
+	// 상품등록 get
 	@RequestMapping(value = "/goods/register", method = RequestMethod.GET)
 	public void getGoodsRegister(Model model) throws Exception {
 		logger.info("getGoodsRegister");
@@ -39,5 +40,14 @@ public class AdminController {
 		List<CategoryVO> category = null;
 		category = adminService.category();
 		model.addAttribute("category", JSONArray.fromObject(category));
-	} 
+	}
+	
+	// 상품등록 post
+	@RequestMapping(value = "/goods/register", method = RequestMethod.POST)
+	public String postGoodsRegister(GoodsVO vo) throws Exception {
+		adminService.register(vo);
+		
+		return "redirect:/admin/index";
+	}
+	
 }
