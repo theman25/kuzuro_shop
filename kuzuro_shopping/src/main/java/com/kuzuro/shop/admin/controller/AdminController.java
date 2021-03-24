@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kuzuro.shop.admin.domain.CategoryVO;
 import com.kuzuro.shop.admin.domain.GoodsVO;
+import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.admin.service.AdminService;
 
 import net.sf.json.JSONArray;
@@ -61,13 +62,52 @@ public class AdminController {
 		model.addAttribute("goodsList", goodsList);
 	}
 	
-	// 상품상세 get
+	// 상품조회 get
 	@RequestMapping(value = "/goods/view", method = RequestMethod.GET)
 	public void getGoodsView(@RequestParam("n") int gdsNum, Model model) throws Exception {
 		logger.info("getGoodsView");
 		
-		GoodsVO goods = adminService.goodsView(gdsNum);
+		//GoodsVO goods = adminService.goodsView(gdsNum);
+		GoodsViewVO goods = adminService.goodsView(gdsNum);
 		
 		model.addAttribute("goods", goods);
 	}
+	
+	// 상품수정 get
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.GET)
+	public void getGoodsModify(@RequestParam("n") int gdsNum, Model model) throws Exception {
+		logger.info("getGoodsModify");
+		
+		List<CategoryVO> category = null;
+		category = adminService.category();
+		
+		//GoodsVO goods = null;
+		GoodsViewVO goods = null;
+		goods = adminService.goodsView(gdsNum);
+		
+		model.addAttribute("category", JSONArray.fromObject(category));
+		model.addAttribute("goods", goods);
+	}
+	
+	// 상품수정 post
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.POST)
+	public String postGoodsModify(GoodsVO vo) throws Exception {
+		logger.info("postGoodsModify");
+		//logger.info("vo : " + vo);
+		
+		adminService.goodsModify(vo);
+		
+		return "redirect:/admin/index";
+	}
+	
+	// 상품삭제 post
+	@RequestMapping(value = "/goods/delete", method = RequestMethod.POST)
+	public String postGoodsDelete(@RequestParam("n") int gdsNum) throws Exception {
+		logger.info("postGoodsDelete");
+		
+		adminService.goodsDelete(gdsNum);
+		
+		return "redirect:/admin/index";
+	}
+
 }

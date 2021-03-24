@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-	<title>[shop] 로그인</title>
+	<title>kuzuro shop</title>
 </head>
 <body>
 <div id="root">
@@ -25,7 +25,7 @@
 
 					<div class="input_area">
 						<label for="userId">아이디</label>
-						<input type="email" id="userId" name="userId" required="required" value="@email.com"/>
+						<input type="email" id="userId" name="userId" required="required" value="an@email.com"/>
 					</div>
 
 					<div class="input_area">

@@ -34,11 +34,39 @@
 		ORDER BY	gdsNum DESC	
 	</select>
 	
-	<!-- 상품 상세 -->
+	<!-- 상품 조회 -->
+	<!-- 
 	<select id="goodsView" resultType="com.kuzuro.shop.admin.domain.GoodsVO">
 		SELECT	gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
 		FROM		tbl_goods
 		WHERE		gdsNum = #{gdsNum}	
 	</select>
+	 -->
+	 
+	<!-- 상품 조회 + 카테고리 조인 -->
+	<select id="goodsView" resultType="com.kuzuro.shop.admin.domain.GoodsViewVO">
+		SELECT	gdsNum, gdsName, g.cateCode, c.cateName, c.cateCodeRef, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+		FROM		tbl_goods g
+		INNER JOIN  tbl_goods_category c ON g.cateCode = c.cateCode
+		WHERE		gdsNum = #{gdsNum}	
+	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="goodsModify">
+		UPDATE 	tbl_goods
+		SET 	gdsName = #{gdsName}
+			,	cateCode = #{cateCode}
+			,	gdsPrice = #{gdsPrice}
+			,	gdsStock = #{gdsStock}
+			,	gdsDes = #{gdsDes}
+		WHERE 	gdsNum = #{gdsNum}
+	</update>
+	
+	<!-- 상품 삭제 -->
+	<delete id="goodsDelete">
+		DELETE FROM tbl_goods
+		WHERE	gdsNum = #{gdsNum}
+	</delete>
+
 </mapper>
 

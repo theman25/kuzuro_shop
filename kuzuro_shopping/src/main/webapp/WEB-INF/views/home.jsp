@@ -3,7 +3,7 @@
 <%-- <%@ page session="false" %> --%>
 <html>
 <head>
-	<title>[shop] Home</title>
+	<title>kuzuro shop</title>
 </head>
 <body>
 <div id="root">

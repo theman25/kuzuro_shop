@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-	<title>[shop] 상품등록</title>
+	<title>kuzuro shop</title>
 	
 	<script src="/resources/jquery/jquery-3.3.1.min.js"></script>
 	<script src="/resources/bootstrap/bootstrap.min.js"></script>
@@ -68,6 +68,8 @@
 			<h2>상품 상세</h2>
 			
 			<form role="form" method="post" autocomplete="off">
+				<input type="hidden" name="n" value="${goods.gdsNum}" />
+				
 				<div class="inputArea">
 					<label>1차 분류</label>
 					<span class="category1"></span>
@@ -92,8 +94,8 @@
 					<span>${goods.gdsDes}</span>
 				</div>
 				<div class="inputArea">
-					<button type="submit" id="btnRegister" class="btn btn-warning">수정</button>
-					<button type="submit" id="btnRegister" class="btn btn-danger">삭제</button>
+					<button type="submit" id="btnModify" class="btn btn-warning">수정</button>
+					<button type="button" id="btnDelete" class="btn btn-danger">삭제</button>
 				</div>
 			</form>
 		</div>
@@ -107,7 +109,24 @@
 </div>
 
 <script type="text/javascript">
-
+	var formObj = $("form[role='form']");
+	
+	$("#btnModify").click(function(){
+		formObj.attr("action", "/admin/goods/modify");
+		formObj.attr("method", "get");
+		formObj.submit();
+	});
+	
+	$("#btnDelete").click(function(){
+		var con = confirm("삭제하시겠습니까?");
+		
+		if(con) {
+			formObj.attr("action", "/admin/goods/delete");
+			//formObj.action = "/admin/goods/delete";	// 안됨
+			formObj.submit();
+		}
+	});
+	
 </script>
 </body>
 </html>

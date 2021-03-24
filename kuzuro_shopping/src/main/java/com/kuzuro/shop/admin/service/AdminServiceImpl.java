@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kuzuro.shop.admin.dao.AdminDAO;
 import com.kuzuro.shop.admin.domain.CategoryVO;
 import com.kuzuro.shop.admin.domain.GoodsVO;
+import com.kuzuro.shop.admin.domain.GoodsViewVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -34,10 +35,22 @@ public class AdminServiceImpl implements AdminService {
 		return dao.goodsList();
 	}
 
-	// 상품상세
+	// 상품상세 + 카테고리
 	@Override
-	public GoodsVO goodsView(int gdsNum) throws Exception {
+	public GoodsViewVO goodsView(int gdsNum) throws Exception {
 		return dao.goodsView(gdsNum);
+	}
+
+	// 상품수정
+	@Override
+	public void goodsModify(GoodsVO vo) throws Exception {
+		dao.goodsModify(vo);
+	}
+
+	// 상품삭제
+	@Override
+	public void goodsDelete(int gdsNum) throws Exception {
+		dao.goodsDelete(gdsNum);
 	}
 
 }

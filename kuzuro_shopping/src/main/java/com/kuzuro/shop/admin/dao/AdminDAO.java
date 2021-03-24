@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kuzuro.shop.admin.domain.CategoryVO;
 import com.kuzuro.shop.admin.domain.GoodsVO;
+import com.kuzuro.shop.admin.domain.GoodsViewVO;
 
 public interface AdminDAO {
 
@@ -16,6 +17,12 @@ public interface AdminDAO {
 	// 상품목록
 	public List<GoodsVO> goodsList() throws Exception;
 	
-	// 상품상세
-	public GoodsVO goodsView(int gdsNum) throws Exception;
+	// 상품상세 + 카테고리
+	public GoodsViewVO goodsView(int gdsNum) throws Exception;
+	
+	// 상품수정
+	public void goodsModify(GoodsVO vo) throws Exception;
+	
+	// 상품삭제
+	public void goodsDelete(int gdsNum) throws Exception;
 }

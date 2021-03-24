@@ -64,7 +64,7 @@
 		</aside>
 		
 		<div id="container_box">
-			<h2>상품 등록</h2>
+			<h2>상품 수정</h2>
 			
 			<form role="form" method="post" autocomplete="off">
 				<div class="inputArea">
@@ -80,22 +80,30 @@
 				</div>
 				<div class="inputArea">
 					<label for="gdsName">상품명</label>
-					<input type="text" id="gdsName" name="gdsName" />
+					<input type="text" id="gdsName" name="gdsName" value="${goods.gdsName}" />
 				</div>
 				<div class="inputArea">
 					<label for="gdsPrice">상품가격</label>
-					<input type="text" id="gdsPrice" name="gdsPrice" />
+					<input type="text" id="gdsPrice" name="gdsPrice" value="${goods.gdsPrice}" />
 				</div>
 				<div class="inputArea">
 					<label for="gdsStock">상품수량</label>
-					<input type="text" id="gdsStock" name="gdsStock" />
+					<input type="text" id="gdsStock" name="gdsStock" value="${goods.gdsStock}" />
 				</div>
 				<div class="inputArea">
 					<label for="gdsDes">상품소개</label>
-					<textarea rows="5" cols="50" id="gdsDes" name="gdsDes"></textarea>
+					<textarea rows="5" cols="50" id="gdsDes" name="gdsDes">${goods.gdsDes}</textarea>
 				</div>
 				<div class="inputArea">
-					<button type="submit" class="btn btn-primary" id="btnRegister">등록</button>
+					<input type="hidden" id="gdsNum" name="gdsNum" value="${goods.gdsNum}" />
+					<button type="submit" id="btnUpdate" class="btn btn-primary">완료</button>
+					<button type="button" id="btnCancle" class="btn btn-warning">취소</button>
+					<script type="text/javascript">
+						$("#btnCancle").click(function(){
+							// history.back();
+							location.href = "/admin/goods/view?n=" + ${goods.gdsNum};
+						});
+					</script>
 				</div>
 			</form>
 		</div>
@@ -162,16 +170,8 @@
 		
 		$("option:selected", this).each(function(){
 			var selectVal = $(this).val();
-			//cate2Select.append("<option value=''>전체</option>");
 			cate2Select.append("<option value='" + selectVal + "'>전체</option>");
-
-			/* 
-			for(var i = 0; cate2Arr.length; i++){
-				if(selectVal == cate2Arr[i].cateCodeRef) {
-					cate2Select.append("<option value='" + cate2Arr[i].cateCode + "'>" + cate2Arr[i].cateName + "</option>");
-				}
-			}
-			 */
+	
 			// uncaught typeerror : cannot read property 해결을 위해 for문 대신 forEach문 사용
 			cate2Arr.forEach(function(cate2Arr){
 				if(selectVal == cate2Arr.cateCodeRef) {
@@ -180,6 +180,27 @@
 			});
 		});
 	});
+	
+	// 이제 카테고리의 데이터를 GoodsViewVO에 가져오므로
+	var select_cateCode = '${goods.cateCode}';	// 쌍따옴표는 에러남
+	var select_cateCodeRef = '${goods.cateCodeRef}' == null ? '': '${goods.cateCodeRef}' ;
+	var select_cateName = '${goods.cateName}';
+	
+	console.log("[select_cateCodeRef]");
+	console.log(select_cateCodeRef);
+	console.log("[select_cateCode]");
+	console.log(select_cateCode);
+	console.log("[select_cateName]");
+	console.log(select_cateName);
+	
+	if(select_cateCodeRef != ''){
+		$(".category1").val(select_cateCodeRef);	// 1차 분류 선택
+		$("select.category1").trigger("change");	// 1차 분류 변경 이벤트 강제 발생
+		$(".category2").val(select_cateCode).attr("selected", "seleceted");	// 2차 분류 선택
+	} else {
+		$(".category1").val("");	// 1차 분류 선택
+		$(".category2").val("");	// 2차 분류 선택
+	}
 </script>
 </body>
 </html>

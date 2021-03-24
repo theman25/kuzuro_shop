@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-	<title>[shop] 상품조회</title>
+	<title>kuzuro shop</title>
 	
 	<script src="/resources/jquery/jquery-3.3.1.min.js"></script>
 	<script src="/resources/bootstrap/bootstrap.min.js"></script>
