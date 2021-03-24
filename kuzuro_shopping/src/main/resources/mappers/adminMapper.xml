@@ -27,5 +27,18 @@
 		VALUES 	(#{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsStock}, #{gdsDes});
 	</insert>
 	
+	<!-- 상폼 목록 -->
+	<select id="goodsList" resultType="com.kuzuro.shop.admin.domain.GoodsVO">
+		SELECT	gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+		FROM		tbl_goods
+		ORDER BY	gdsNum DESC	
+	</select>
+	
+	<!-- 상품 상세 -->
+	<select id="goodsView" resultType="com.kuzuro.shop.admin.domain.GoodsVO">
+		SELECT	gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+		FROM		tbl_goods
+		WHERE		gdsNum = #{gdsNum}	
+	</select>
 </mapper>
 

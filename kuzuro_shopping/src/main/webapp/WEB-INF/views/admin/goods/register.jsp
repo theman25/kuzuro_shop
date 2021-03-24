@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-	<title>Shop Admin</title>
+	<title>[shop] 상품등록</title>
 	
 	<script src="/resources/jquery/jquery-3.3.1.min.js"></script>
 	<script src="/resources/bootstrap/bootstrap.min.js"></script>
@@ -162,15 +162,22 @@
 		
 		$("option:selected", this).each(function(){
 			var selectVal = $(this).val();
-			
 			//cate2Select.append("<option value=''>전체</option>");
 			cate2Select.append("<option value='" + selectVal + "'>전체</option>");
-			
+
+			/* 
 			for(var i = 0; cate2Arr.length; i++){
 				if(selectVal == cate2Arr[i].cateCodeRef) {
 					cate2Select.append("<option value='" + cate2Arr[i].cateCode + "'>" + cate2Arr[i].cateName + "</option>");
 				}
 			}
+			 */
+			// uncaught typeerror : cannot read property 해결을 위해 for문 대신 forEach문 사용
+			cate2Arr.forEach(function(cate2Arr){
+				if(selectVal == cate2Arr.cateCodeRef) {
+					cate2Select.append("<option value='" + cate2Arr.cateCode + "'>" + cate2Arr.cateName + "</option>");
+				}
+			});
 		});
 	});
 </script>

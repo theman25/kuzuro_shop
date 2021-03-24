@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kuzuro.shop.admin.domain.CategoryVO;
 import com.kuzuro.shop.admin.domain.GoodsVO;
@@ -50,4 +51,23 @@ public class AdminController {
 		return "redirect:/admin/index";
 	}
 	
+	// 상품목록 get
+	@RequestMapping(value = "/goods/list", method = RequestMethod.GET)
+	public void getGoodsList(Model model) throws Exception {
+		logger.info("getGoodsList");
+		
+		List<GoodsVO> goodsList = adminService.goodsList();
+		
+		model.addAttribute("goodsList", goodsList);
+	}
+	
+	// 상품상세 get
+	@RequestMapping(value = "/goods/view", method = RequestMethod.GET)
+	public void getGoodsView(@RequestParam("n") int gdsNum, Model model) throws Exception {
+		logger.info("getGoodsView");
+		
+		GoodsVO goods = adminService.goodsView(gdsNum);
+		
+		model.addAttribute("goods", goods);
+	}
 }

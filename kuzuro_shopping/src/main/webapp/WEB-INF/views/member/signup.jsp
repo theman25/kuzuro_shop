@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-	<title>Shop signup</title>
+	<title>[shop] 회원가입</title>
 </head>
 <body>
 <div id="root">
