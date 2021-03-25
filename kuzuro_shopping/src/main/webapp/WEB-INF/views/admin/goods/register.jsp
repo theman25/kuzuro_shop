@@ -113,7 +113,7 @@
 					<label for="gdsImg">이미지</label>
 					<input type="file" id="gdsImg" name="file" />
 					<div class="select_img">
-						<img src="">
+						<img src="" />
 					</div>
 					<script type="text/javascript">
 						$("#gdsImg").change(function(){
@@ -227,6 +227,18 @@
 			});
 		});
 	});
+</script>
+
+<script type="text/javascript">
+	var regExp = /[^0-9]/gi;
+	
+	$("#gdsPrice").keyup(function(){ numCheck($(this)); });	// $(this) =  $("#gdsPrice")
+	$("#gdsStock").keyup(function(){ numCheck($(this)); });	// $(this) =  $("#gdsStock")
+	
+	function numCheck(selector){
+		var tempVal = selector.val();
+		selector.val(tempVal.replace(regExp, ""));
+	}
 </script>
 </body>
 </html>

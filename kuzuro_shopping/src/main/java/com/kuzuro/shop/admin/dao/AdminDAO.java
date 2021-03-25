@@ -15,7 +15,10 @@ public interface AdminDAO {
 	public void register(GoodsVO vo) throws Exception;
 
 	// 상품목록
-	public List<GoodsVO> goodsList() throws Exception;
+	//public List<GoodsVO> goodsList() throws Exception;
+	
+	// 상품목록 + 카테고리 + 이미지
+	public List<GoodsViewVO> goodsList() throws Exception;
 	
 	// 상품상세 + 카테고리
 	public GoodsViewVO goodsView(int gdsNum) throws Exception;

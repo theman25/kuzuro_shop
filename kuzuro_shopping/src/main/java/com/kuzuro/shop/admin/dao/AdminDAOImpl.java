@@ -32,9 +32,9 @@ public class AdminDAOImpl implements AdminDAO {
 		sql.insert(namespace + ".register", vo);
 	}
 
-	// 상품목록
+	// 상품목록 + 카테고리 + 이미지
 	@Override
-	public List<GoodsVO> goodsList() throws Exception {
+	public List<GoodsViewVO> goodsList() throws Exception {
 		return sql.selectList(namespace + ".goodsList");
 	}
 

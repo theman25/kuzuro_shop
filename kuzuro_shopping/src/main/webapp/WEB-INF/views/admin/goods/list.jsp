@@ -27,9 +27,9 @@
 		aside { float:left; width:200px; }
 		div#container_box { float:right; width:calc(100% - 200px - 20px); }
 	 
+		aside ul li { text-align:center; margin-bottom:10px; }
 		aside ul li a { display:block; width:100%; padding:10px 0;}
 		aside ul li a:hover { background:#eee; }
-		aside ul li { text-align:center; margin-bottom:10px; }
 	 
 		footer#footer { background:#f9f9f9; padding:20px; }
 		footer#footer ul li { display:inline-block; margin-right:10px; }
@@ -46,6 +46,15 @@
 	
 	<style>
 		#container_box table td { width:100px;}
+	</style>
+	
+	<style>
+		#container_box table 	 { width:900px;}
+		#container_box table tr  { background:#eee; }
+		#container_box table th  { font-size:20px; font-weight:bold; 
+								  text-align:center; padding:10px; border-bottom:2px solid #666; }
+		#container_box table td  { padding:10px; text-align:center; }
+		#container_box table img { width:150px; heigh:auto; }
 	</style>
 </head>
 
@@ -75,6 +84,7 @@
 				<thead>
 					<tr>
 						<th>번호</th>
+						<th>썸네일</th>
 						<th>이름</th>
 						<th>카테고리</th>
 						<th>가격</th>
@@ -87,9 +97,13 @@
 					<tr>
 						<td>${goods.gdsNum}</td>
 						<td>
+							<img src="${goods.gdsThumbImg}">
+						</td>
+						<td>
 							<a href="/admin/goods/view?n=${goods.gdsNum}">${goods.gdsName}</a>
 						</td>
-						<td>${goods.cateCode}</td>
+						<!-- <td>${goods.cateCode}</td> -->
+						<td>${goods.cateName}</td>
 						<td>
 							<fmt:formatNumber value="${goods.gdsPrice}" pattern="###,###,###" />
 						</td>

@@ -71,24 +71,24 @@ public class AdminController {
 	public String postGoodsRegister(GoodsVO vo, MultipartFile file) throws Exception {
 		logger.info("postGoodsRegister");
 		
-		String imgUploadPath = uploadPath + File.separator + "imgUpload";	// 이미지를 업로드할 폴더
+		String imgUploadPath = uploadPath + File.separator + "imgUpload";	// 이미지를 업로드할 폴더를 설정 = /uploadPath/imgUpload
 		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);			// 위 폴더를 기준으로 연월일 폴더 생성
 		String fileName = null;												// 기본 경로와 별개로 작성되는 경로 + 파일이름
 		
 		//if(file != null) {	// 파일을 추가 하지 않더라도 파일은 값과 용량을 가지고 있음
+		// input 박스에 첨부된 파일이 있다면(=첨부된 파일의 이름이 있다면)
 		if(file.getOriginalFilename() != null && file.getOriginalFilename() != "") {	// 유일하게 값이 없는 파일 이름		
-			// input 박스에 첨부된 파일이 있다면(=첨부된 파일의 이름이 있다면)
-			fileName = UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
-		} else {
-			// input 박스에 첨부된 파일이 없다면(=첨부된 파일의 이름이 없다면)
+			fileName = UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath);
+			vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);										// gdsImg에 원본 파일 경로 + 파일명 저장
+			vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);	// gdsThumbImg에 썸네일 파일 경로 + 썸네일 파일명 저장 
+		} 
+		// input 박스에 첨부된 파일이 없다면(=첨부된 파일의 이름이 없다면)
+		else {
 			// 미리 준비된 none.png파일을 대신 출력
-			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
+			fileName = File.separator + "images" + File.separator + "none.png";
+			vo.setGdsImg(fileName);			// gdsImg에 원본 파일 경로 + 파일명 저장
+			vo.setGdsThumbImg(fileName);	// gdsThumbImg에 썸네일 파일 경로 + 썸네일 파일명 저장
 		}
-		
-		// gdsImg에 원본 파일 경로 + 파일명 저장
-		vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
-		// gdsThumbImg에 썸네일 파일 경로 + 썸네일 파일명 저장
-		vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
 		
 		adminService.register(vo);
 		
@@ -100,7 +100,9 @@ public class AdminController {
 	public void getGoodsList(Model model) throws Exception {
 		logger.info("getGoodsList");
 		
-		List<GoodsVO> goodsList = adminService.goodsList();
+		//List<GoodsVO> goodsList = null;
+		List<GoodsViewVO> goodsList = null;
+		goodsList = adminService.goodsList();
 		
 		model.addAttribute("goodsList", goodsList);
 	}

@@ -28,9 +28,20 @@
 	</insert>
 	
 	<!-- 상폼 목록 -->
+	<!-- 
 	<select id="goodsList" resultType="com.kuzuro.shop.admin.domain.GoodsVO">
 		SELECT		gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
 		FROM		tbl_goods
+		ORDER BY	gdsNum DESC	
+	</select>
+	 -->
+	<!-- 상폼 목록 + 카테고리 + 이미지 -->
+	<select id="goodsList" resultType="com.kuzuro.shop.admin.domain.GoodsViewVO">
+		SELECT		gdsNum, gdsName, g.cateCode, c.cateCodeRef, c.cateName,
+					gdsPrice, gdsStock, gdsDes, gdsDate,
+					gdsImg, gdsThumbImg
+		FROM		tbl_goods g
+		INNER JOIN  tbl_goods_category c ON g.cateCode = c.cateCode
 		ORDER BY	gdsNum DESC	
 	</select>
 	
@@ -46,7 +57,7 @@
 	<!-- 상품 조회 + 카테고리 조인 -->
 	<select id="goodsView" resultType="com.kuzuro.shop.admin.domain.GoodsViewVO">
 		SELECT		gdsNum, gdsName, g.cateCode, c.cateName, c.cateCodeRef, 
-					gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+					gdsPrice, gdsStock, gdsDes, gdsDate,
 					gdsImg, gdsThumbImg
 		FROM		tbl_goods g
 		INNER JOIN  tbl_goods_category c ON g.cateCode = c.cateCode
