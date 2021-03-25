@@ -8,6 +8,7 @@
 	<script src="/resources/bootstrap/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/resources/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/resources/bootstrap/bootstrap-theme.min.css">	
+	<script src="/resources/ckeditor/ckeditor.js"></script>
 	
 	<style>
 		body { font-family:'맑은 고딕', verdana; padding:0; margin:0; }
@@ -96,6 +97,18 @@
 					<label for="gdsDes">상품소개</label>
 					<textarea rows="5" cols="50" id="gdsDes" name="gdsDes"></textarea>
 				</div>
+				
+				<script>
+					var ckeditor_config = {
+						resize_enaleb : false,
+						enterMode : CKEDITOR.ENTER_BR,
+						shiftEnterMode : CKEDITOR.ENTER_P,
+						filebrowserUploadUrl : "/admin/goods/ckUpload"	// 파일을 업로드 할 경우, 설정한 url로 전송
+					};
+				
+					CKEDITOR.replace("gdsDes", ckeditor_config);
+				</script>
+				
 				<div class="inputArea">
 					<label for="gdsImg">이미지</label>
 					<input type="file" id="gdsImg" name="file" />

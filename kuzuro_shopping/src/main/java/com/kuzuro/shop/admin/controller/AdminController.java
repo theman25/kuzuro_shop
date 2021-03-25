@@ -1,11 +1,17 @@
 package com.kuzuro.shop.admin.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,24 +71,30 @@ public class AdminController {
 	public String postGoodsRegister(GoodsVO vo, MultipartFile file) throws Exception {
 		logger.info("postGoodsRegister");
 		
-		String imgUploadPath = uploadPath + File.separator + "imgUpload";
-		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);
-		String fileName = null;
+		String imgUploadPath = uploadPath + File.separator + "imgUpload";	// 이미지를 업로드할 폴더
+		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);			// 위 폴더를 기준으로 연월일 폴더 생성
+		String fileName = null;												// 기본 경로와 별개로 작성되는 경로 + 파일이름
 		
-		if(file != null) {
+		//if(file != null) {	// 파일을 추가 하지 않더라도 파일은 값과 용량을 가지고 있음
+		if(file.getOriginalFilename() != null && file.getOriginalFilename() != "") {	// 유일하게 값이 없는 파일 이름		
+			// input 박스에 첨부된 파일이 있다면(=첨부된 파일의 이름이 있다면)
 			fileName = UploadFileUtils.fileUpload(imgUploadPath, file.getOriginalFilename(), file.getBytes(), ymdPath); 
 		} else {
+			// input 박스에 첨부된 파일이 없다면(=첨부된 파일의 이름이 없다면)
+			// 미리 준비된 none.png파일을 대신 출력
 			fileName = uploadPath + File.separator + "images" + File.separator + "none.png";
 		}
 		
+		// gdsImg에 원본 파일 경로 + 파일명 저장
 		vo.setGdsImg(File.separator + "imgUpload" + ymdPath + File.separator + fileName);
+		// gdsThumbImg에 썸네일 파일 경로 + 썸네일 파일명 저장
 		vo.setGdsThumbImg(File.separator + "imgUpload" + ymdPath + File.separator + "s" + File.separator + "s_" + fileName);
 		
 		adminService.register(vo);
 		
 		return "redirect:/admin/index";
 	}
-		
+
 	// 상품목록 get
 	@RequestMapping(value = "/goods/list", method = RequestMethod.GET)
 	public void getGoodsList(Model model) throws Exception {
@@ -160,4 +172,54 @@ public class AdminController {
 		return "redirect:/admin/index";
 	}
 
+	//ck 에이터에서 파일 업로드
+	@RequestMapping(value = "/goods/ckUpload", method = RequestMethod.POST)
+	public void postCKEditorImgUpload(HttpServletRequest request, HttpServletResponse response, 
+									@RequestParam MultipartFile upload) throws Exception {
+		logger.info("postCKEditorImgUpload");
+		
+		// 랜덤 문자 생성
+		UUID uid = UUID.randomUUID();
+		
+		OutputStream out = null;
+		PrintWriter printWriter = null;
+		
+		// 인코딩
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		
+		try {
+			// 파일 이름 가져오기
+			String fileName = upload.getOriginalFilename();
+			byte[] bytes = upload.getBytes();
+			
+			// 업로드 경로
+			String ckUploadPath = uploadPath + File.separator + "ckUpload" + File.separator + uid + "_" + fileName;
+			
+			out = new FileOutputStream(new File(ckUploadPath));
+			out.write(bytes);
+			out.flush();	// out에 저장된 데이터를 전송하고 초기화
+			
+			String callback = request.getParameter("CKEditorFuncNum");
+			printWriter = response.getWriter();
+			String fileUrl = "/ckUpload/" + uid + "_" + fileName;	// 작성화면
+			
+			// 업로드 시 메세지 출력
+			// ck 에디터가 업데이트 되면서 아래 방밥으로 변경
+			printWriter.println("{\"filename\" : \"" + fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
+			//printWriter.println("{'filename' : '" + fileName + "', 'uploaded' : 1, 'url':'" + fileUrl + "'}");
+			printWriter.flush();
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		} 
+		finally {
+			try {
+				if(out != null) { out.close(); }
+				if(printWriter != null) { printWriter.close(); }
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
