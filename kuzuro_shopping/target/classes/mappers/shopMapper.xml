@@ -23,5 +23,6 @@
 		INNER JOIN  tbl_goods_category c ON g.cateCode = c.cateCode
 		WHERE		g.cateCode = #{cateCode}
 	</select>
+	
 </mapper>
 
