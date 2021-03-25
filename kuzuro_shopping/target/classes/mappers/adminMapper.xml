@@ -61,6 +61,8 @@
 			,	gdsPrice = #{gdsPrice}
 			,	gdsStock = #{gdsStock}
 			,	gdsDes = #{gdsDes}
+			,	gdsImg = #{gdsImg}
+			,	gdsThumbImg = #{gdsThumbImg}
 		WHERE 	gdsNum = #{gdsNum}
 	</update>
 	

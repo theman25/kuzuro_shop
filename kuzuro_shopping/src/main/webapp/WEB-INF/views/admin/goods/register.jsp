@@ -42,7 +42,7 @@
 		input { width:150px; }
 		textarea#gdsDes { width:400px; height:180px; }
 		
-		.select_img img { margin:20px 0; }
+		.select_img img { width:500px; margin:20px 0; }
 	</style>
 </head>
 
