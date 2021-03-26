@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.shop.dao.ShopDAO;
+import com.kuzuro.shop.shop.domain.ReplyListVO;
+import com.kuzuro.shop.shop.domain.ReplyVO;
 
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -34,6 +36,18 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public GoodsViewVO goodsView(int gdsNum) throws Exception {
 		return dao.goodsView(gdsNum);
+	}
+
+	// 상품 소감(댓글) 작성
+	@Override
+	public void registReply(ReplyVO reply) throws Exception {
+		dao.registReply(reply);
+	}
+
+	// 상품 소감(댓글) 리스트 조회
+	@Override
+	public List<ReplyListVO> replyList(int gdsNum) throws Exception {
+		return dao.replyList(gdsNum);
 	}
 	
 }

@@ -24,5 +24,19 @@
 		WHERE		g.cateCode = #{cateCode}
 	</select>
 	
+	<!-- 상품 소감(댓글) 작성 -->
+	<insert id="registReply">
+		INSERT INTO tbl_reply (gdsNum, userId, repNum, repCon)
+		VALUES (#{gdsNum}, #{userId}, nextval(tbl_reply_seq) , #{repCon});
+	</insert>
+	
+	<!-- 상품 소감(댓글) 리스트 조회 -->
+	<select id="replyList" resultType="com.kuzuro.shop.shop.domain.ReplyListVO">
+		SELECT 	gdsNum, r.userId, m.userName, repNum, repCon, r.repDate
+		FROM		tbl_reply r
+		INNER JOIN tbl_member m ON r.userId = m.userId
+		WHERE 	gdsNum = #{gdsNum}
+		ORDER BY repNum DESC
+	</select>
 </mapper>
 

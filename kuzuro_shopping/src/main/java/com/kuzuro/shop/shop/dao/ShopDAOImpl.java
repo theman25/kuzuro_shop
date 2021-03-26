@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
+import com.kuzuro.shop.shop.domain.ReplyListVO;
+import com.kuzuro.shop.shop.domain.ReplyVO;
 
 @Repository
 public class ShopDAOImpl implements ShopDAO {
@@ -40,4 +42,17 @@ public class ShopDAOImpl implements ShopDAO {
 	public GoodsViewVO goodsView(int gdsNum) throws Exception {
 		return sql.selectOne("com.kuzuro.shop.mappers.adminMapper.goodsView", gdsNum);
 	}
+
+	// 상품 소감(댓글) 작성
+	@Override
+	public void registReply(ReplyVO reply) throws Exception {
+		sql.insert(namespace + ".registReply", reply);
+	}
+
+	// 상품 소감(댓글) 리스트 조회
+	@Override
+	public List<ReplyListVO> replyList(int gdsNum) throws Exception {
+		return sql.selectList(namespace + ".replyList", gdsNum);
+	}
+	
 }
