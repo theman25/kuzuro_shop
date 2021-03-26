@@ -94,4 +94,25 @@ public class ShopController {
 		return replyList;
 	}
 	
+	// 상품 소감(댓글) 삭제 - ajax
+	@ResponseBody
+	@RequestMapping(value = "/view/deleteReply", method = RequestMethod.POST)
+	public int deleteReply(ReplyVO reply, HttpSession session) throws Exception {
+		logger.info("deleteReply");
+		
+		int result = 0;
+		
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		String userId = service.idCheck(reply.getRepNum());
+		
+		if(member.getUserId().equals(userId)) {
+			reply.setUserId(member.getUserId());
+			service.deleteReply(reply);
+			result = 1;
+		}
+		
+		return result;
+	}
+	
+	
 }

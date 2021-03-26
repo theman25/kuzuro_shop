@@ -82,6 +82,9 @@
 		section.replyList div.userInfo .userName { font-size:24px; font-weight:bold; }
 		section.replyList div.userInfo .date { color:#999; display:inline-block; margin-left:10px; }
 		section.replyList div.replyContent { padding:10px; margin:20px 0; }
+		
+		section.replyList div.replyFooter { margin:10px;}
+		section.replyList div.replyFooter button { font-size:14px; border:1px solid #999; background:none; margin-right:10px; }
 	</style>
 	
 	<script type="text/javascript">
@@ -107,6 +110,11 @@
 						+	"<span class='date'>" + repDate + "</span>"
 						+	"</div>"
 						+	"<div class='replyContent'>" + this.repCon + "</div>"
+						/* 상품소감 삭제/수정 버튼 */
+						+	"<div class='replyFooter'>"
+						+	"<button type='button' class='modify' data-repNum='" + this.repNum + "'>M</button>"
+						+	"<button type='button' class='delete' data-repNum='" + this.repNum + "'>D</button>"
+						
 						+	"</li>";
 				});
 				$("section.replyList ol").html(str);
@@ -205,6 +213,7 @@
 						${view.gdsDes}
 					</div>
 					
+					<!-- --------------------------------------------------------------------------------------- -->
 					<!-- 상품소감(댓글) -->
 					<div id="reply">
 						<c:if test="${member == null}">
@@ -264,8 +273,36 @@
 							<script type="text/javascript">
 								replyList();
 							</script>
+							<script type="text/javascript">
+								// 소감 목록은 스크립트로인해 생성된 동적인 HTML코드로, 일반적인 클릭 메서드 .click() 가 아니라 .on() 메서드를 사용해야합니다.
+								$(document).on("click", ".delete", function(){
+									var deleteConfirm = confirm("삭제 하시겠습니까?");
+									
+									if(deleteConfirm) {
+										var data = { repNum : $(this).attr("data-repNum") };
+										
+										$.ajax({
+											url : "/shop/view/deleteReply",
+											type : "post",
+											data : data,
+											success : function(result){
+												if(result == 1){
+													replyList();
+												} else {
+													alert("작성자 본인만 삭제 할 수 있습니다.");
+												}
+											},
+											error : function() {
+												alert("로그인이 필요합니다.");
+											}
+										});
+									}
+								});
+							</script>
 						</section>
 					</div>
+					<!-- --------------------------------------------------------------------------------------- -->
+					
 				</div>
 			</section>
 		</div>
