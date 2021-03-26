@@ -87,6 +87,15 @@
 		section.replyList div.replyFooter button { font-size:14px; border:1px solid #999; background:none; margin-right:10px; }
 	</style>
 	
+	<style type="text/css">
+		div.replyModal { position:relative; z-index:1; display:none;}
+		div.modalBackground { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.8); z-index:-1; }
+		div.modalContent { position:fixed; top:20%; left:calc(50% - 250px); width:500px; height:250px; padding:20px 10px; background:#fff; border:2px solid #666; }
+		div.modalContent textarea { font-size:16px; font-family:'맑은 고딕', verdana; padding:10px; width:500px; height:200px; }
+		div.modalContent button { font-size:20px; padding:5px 10px; margin:10px 0; background:#fff; border:1px solid #ccc; }
+		div.modalContent button.modal_cancel { margin-left:20px; }
+	</style>
+	
 	<script type="text/javascript">
 		function replyList(){
 			var gdsNum = $("#gdsNum").val();
@@ -98,22 +107,26 @@
 					console.log("[replyList]");
 					console.log(data);
 					
+					// 날짜 데이터 포맷팅
 					var repDate = new Date(this.repDate);
 					repDate = repDate.toLocaleDateString("ko-US");
 					
 					console.log("[repDate]");
 					console.log(repDate);
 					
-					str += 	"<li data-gdsNum='" + this.gdsNum + "'>"
+					// HTML코드 조립
+					str += 	"<li data-repNum='" + this.repNum + "'>"	//"<li data-gdsNum='" + this.gdsNum + "'>"
 						+	"<div class='userInfo'>"
 						+	"<span class='userName'>" + this.userName + "</span>"
 						+	"<span class='date'>" + repDate + "</span>"
 						+	"</div>"
 						+	"<div class='replyContent'>" + this.repCon + "</div>"
 						/* 상품소감 삭제/수정 버튼 */
+						+	"<c:if test='${member != null}'>"
 						+	"<div class='replyFooter'>"
 						+	"<button type='button' class='modify' data-repNum='" + this.repNum + "'>M</button>"
 						+	"<button type='button' class='delete' data-repNum='" + this.repNum + "'>D</button>"
+						+	"</c:if>"
 						
 						+	"</li>";
 				});
@@ -275,6 +288,17 @@
 							</script>
 							<script type="text/javascript">
 								// 소감 목록은 스크립트로인해 생성된 동적인 HTML코드로, 일반적인 클릭 메서드 .click() 가 아니라 .on() 메서드를 사용해야합니다.
+								$(document).on("click", ".modify", function(){
+									//$(".replyModal").attr("style", "display:block;");
+									$(".replyModal").fadeIn(200);
+									
+									var repNum = $(this).attr("data-repNum");
+									var repCon = $(this).parent().parent().children(".replyContent").text();
+									
+									$(".modal_repCon").val(repCon);
+									$(".btnModalModify").attr("data-repNum", repNum);
+								});
+								
 								$(document).on("click", ".delete", function(){
 									var deleteConfirm = confirm("삭제 하시겠습니까?");
 									
@@ -314,5 +338,62 @@
 		</div>
 	</footer>
 </div>
+
+<!-- --------------------------------------------------------------------------------------- -->
+<!-- 댓글 수정 모달 폼 -->
+<div class="replyModal">
+	<div class="modalContent">
+		<div>
+			<textarea class="modal_repCon" name="modal_repCon"></textarea>
+		</div>
+		<div>
+			<button type="button" class="btnModalModify">수정</button>
+			<button type="button" class="btnModalCancle">취소</button>
+		</div>
+	</div>
+	<div class="modalBackground"></div>
+</div>
+<!-- --------------------------------------------------------------------------------------- -->
+<script type="text/javascript">
+	$(".btnModalModify").click(function(){
+		console.log("모달 수정 버튼 클릭");
+		
+		var modifyConfirm = confirm("수정 하시겠습니까?");
+		if(modifyConfirm) {
+			console.log("[modifyConfirm]");
+			console.log(modifyConfirm);
+			
+			var data = { repNum : $(this).attr("data-repNum"),
+						 repCon : $(".modal_repCon").val()		
+					   }
+			console.log("[data]");
+			console.log(data);
+			$.ajax({
+				url : "/shop/view/modifyReply",
+				type : "post",
+				data : data,
+				success : function(result) {
+					if(result == 1) {
+						console.log("success : result = 1");
+						replyList();	// 댓글 목록 조회
+						$(".replyModal").fadeOut(200);
+					} else {
+						console.log("success : result = 0");
+						alert("작성자 본인만 수정 할 수 있습니다.");		// 작성자 본인이 아닌 경우
+					}
+				},
+				error : function(){
+					console.log("error");
+					alert("로그인이 필요합니다.");		// 로그인 하지 않아서 에러가 발생한 경우
+				}
+			});
+		}
+	});
+	
+	$(".btnModalCancle").click(function(){
+		//$(".replyModal").attr("style", "diplay:none;");
+		$(".replyModal").fadeOut(200);
+	});
+</script>
 </body>
 </html>
