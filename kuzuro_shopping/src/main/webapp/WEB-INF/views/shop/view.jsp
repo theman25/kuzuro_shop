@@ -83,6 +83,36 @@
 		section.replyList div.userInfo .date { color:#999; display:inline-block; margin-left:10px; }
 		section.replyList div.replyContent { padding:10px; margin:20px 0; }
 	</style>
+	
+	<script type="text/javascript">
+		function replyList(){
+			var gdsNum = $("#gdsNum").val();
+			
+			$.getJSON("/shop/view/replyList" + "?n=" + gdsNum, function(data){
+				var str = "";
+				
+				$(data).each(function(){
+					console.log("[replyList]");
+					console.log(data);
+					
+					var repDate = new Date(this.repDate);
+					repDate = repDate.toLocaleDateString("ko-US");
+					
+					console.log("[repDate]");
+					console.log(repDate);
+					
+					str += 	"<li data-gdsNum='" + this.gdsNum + "'>"
+						+	"<div class='userInfo'>"
+						+	"<span class='userName'>" + this.userName + "</span>"
+						+	"<span class='date'>" + repDate + "</span>"
+						+	"</div>"
+						+	"<div class='replyContent'>" + this.repCon + "</div>"
+						+	"</li>";
+				});
+				$("section.replyList ol").html(str);
+			}); 
+		}
+	</script>
 </head>
 <body>
 <div id="root">
@@ -110,7 +140,7 @@
 				<h2>상품 조회</h2>
 				
 				<form role="form" method="post">
-					<input type="hidden" name="gdsNum" value="${view.gdsNum}">
+					<input type="hidden" id="gdsNum" name="gdsNum" value="${view.gdsNum}" />
 				</form>
 				
 				<div class="goods">
@@ -184,13 +214,10 @@
 						<c:if test="${member != null}">
 							<section class="replyForm">
 								<form role="form" method="post" autocomplete="off">
-									
-									<input type="hidden" name="gdsNum" value="${view.gdsNum}" />
-									
+									<input type="hidden" id="gdsNum" name="gdsNum" value="${view.gdsNum}" />
 									<div class="input_area">
 										<textarea rows="5" cols="50" name="repCon" id="repCon"></textarea>
 									</div>
-									
 									<div class="input_area">
 										<button type="button" id="btnReply">소감 남기기</button>
 									</div>
@@ -199,17 +226,30 @@
 						</c:if>
 						
 						<script>
-							var formObj = $("form[role='form']");
-							
 							$("#btnReply").click(function(){
-								formObj.attr("action", "/shop/view");
-								formObj.attr("method", "post");
-								formObj.submit();
+								var formObj = $(".replyForm form[role='form']");
+								var gdsNum = $("#gdsNum").val();
+								var repCon = $("#repCon").val();
+								
+								var data = {
+										gdsNum : gdsNum,
+										repCon : repCon
+								};
+								$.ajax({
+									url : "/shop/view/registReply",
+									type : "post",
+									data : data,
+									success : function(){
+										replyList();
+										$("#repCon").val("");
+									}
+								});
 							});
 						</script>
 						<section class="replyList">
 							<ol>
 								<li>댓글 목록</li>
+								<%-- 
 								<c:forEach items="${replyList}" var="reply">
 									<li>
 										<div class="userInfo">
@@ -219,7 +259,11 @@
 										<div class="replyContent">${reply.repCon}</div>
 									</li>
 								</c:forEach>
+								 --%>
 							</ol>
+							<script type="text/javascript">
+								replyList();
+							</script>
 						</section>
 					</div>
 				</div>

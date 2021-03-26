@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.member.domain.MemberVO;
@@ -46,15 +47,16 @@ public class ShopController {
 		
 		GoodsViewVO view = null;
 		view = service.goodsView(gdsNum);
-		
-		List<ReplyListVO> replyList = null;
-		replyList = service.replyList(gdsNum);
-		
 		model.addAttribute("view", view);
-		model.addAttribute("replyList", replyList);
+		
+		// 상품소감목록 조회 ajax로 대체
+		//List<ReplyListVO> replyList = null;
+		//replyList = service.replyList(gdsNum);
+		//model.addAttribute("replyList", replyList);
 	}
 	
 	// 상품 조회 - 소감(댓글) 작성
+	/*
 	@RequestMapping(value = "/view", method = RequestMethod.POST)
 	public String registReply(ReplyVO reply, HttpSession session) throws Exception {
 		logger.info("registReply");
@@ -65,6 +67,31 @@ public class ShopController {
 		service.registReply(reply);
 		
 		return "redirect:/shop/view?n=" + reply.getGdsNum();
+	}
+	*/
+	
+	// 상품  소감(댓글) 작성 - ajax
+	@ResponseBody
+	@RequestMapping(value = "/view/registReply", method = RequestMethod.POST)
+	public void registReplyAjax(ReplyVO reply, HttpSession session) throws Exception {
+		logger.info("registReplyAjax");
+		
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		reply.setUserId(member.getUserId());
+		
+		service.registReply(reply);
+	}
+	
+	// 상품 소감(댓글) 목록 - ajax
+	@ResponseBody
+	@RequestMapping(value = "/view/replyList", method = RequestMethod.GET)
+	public List<ReplyListVO> getReplyList(@RequestParam("n") int gdsNum) throws Exception {
+		logger.info("getReplyList");
+		
+		List<ReplyListVO> replyList = null;
+		replyList = service.replyList(gdsNum);
+		
+		return replyList;
 	}
 	
 }
