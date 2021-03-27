@@ -33,6 +33,7 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/admin/**"/>
+			<mapping path="/shop/cartList"/>
 			<beans:ref bean="AdminInterceptor" />
 		</interceptor>
 	</interceptors>

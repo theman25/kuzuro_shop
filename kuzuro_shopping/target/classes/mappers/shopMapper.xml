@@ -77,5 +77,12 @@
 		WHERE 		c.userId = #{userId}
 	</select>
 	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart">
+		DELETE 	FROM tbl_cart
+		WHERE	cartNum = #{cartNum}
+		AND 	userId = #{userId}
+	</delete>
+	
 </mapper>
 

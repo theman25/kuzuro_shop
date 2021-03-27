@@ -86,5 +86,11 @@ public class ShopDAOImpl implements ShopDAO {
 	public List<CartListVO> cartList(String userId) throws Exception {
 		return sql.selectList(namespace + ".cartList", userId);
 	}
+
+	// 카트 삭제
+	@Override
+	public void deleteCart(CartVO cart) throws Exception {
+		sql.delete(namespace + ".deleteCart", cart);
+	}
 	
 }
