@@ -61,5 +61,21 @@
 		WHERE	repNum = #{repNum}
 	</select>
 	
+	<!-- 카트 담기 -->
+	<insert id="addCart">
+		INSERT INTO tbl_cart (cartNum, userId, gdsNum, cartStock)
+		VALUES (nextval(tbl_cart_seq), #{userId}, #{gdsNum}, #{cartStock})
+	</insert>
+	
+	<!-- 카트 리스트 -->
+	<select id="cartList" resultType="com.kuzuro.shop.shop.domain.CartListVO">
+		SELECT		row_number() over(ORDER BY c.cartNum DESC) AS num,
+					c.cartNum, c.userId, c.gdsNum, c.cartStock, c.addDate,
+					g.gdsName, g.gdsPrice, g.gdsThumbImg
+		FROM		tbl_cart c
+		INNER JOIN 	tbl_goods g ON c.gdsNum = g.gdsNum
+		WHERE 		c.userId = #{userId}
+	</select>
+	
 </mapper>
 

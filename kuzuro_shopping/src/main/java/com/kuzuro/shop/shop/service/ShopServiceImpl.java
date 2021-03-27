@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.shop.dao.ShopDAO;
+import com.kuzuro.shop.shop.domain.CartListVO;
+import com.kuzuro.shop.shop.domain.CartVO;
 import com.kuzuro.shop.shop.domain.ReplyListVO;
 import com.kuzuro.shop.shop.domain.ReplyVO;
 
@@ -66,6 +68,18 @@ public class ShopServiceImpl implements ShopService {
 	@Override
 	public void modifyReply(ReplyVO reply) throws Exception {
 		dao.modifyReply(reply);
+	}
+
+	// 카트 담기
+	@Override
+	public void addCart(CartVO cart) throws Exception {
+		dao.addCart(cart);
+	}
+
+	// 카트 리스트
+	@Override
+	public List<CartListVO> cartList(String userId) throws Exception {
+		return dao.cartList(userId);
 	}
 	
 }

@@ -189,16 +189,17 @@
 						<p class="cartStock">
 							<span>구입 수량</span>
 							<!-- <input type="number" min="1" max="${view.gdsStock}" value="1" /> -->
-							<button type="button" class="plus">+</button>
-							<input type="number" class="numBox" min="1" max="${view.gdsStock}" value="1" readonly="readonly"/>
 							<button type="button" class="minus">-</button>
+							<input type="number" class="numBox" min="1" max="${view.gdsStock}" value="1" readonly="readonly"/>
+							<button type="button" class="plus">+</button>
 							
 							<script>
 								$(".plus").click(function(){
 									var num = $(".numBox").val();
 									var plusNum = Number(num) + 1;
+									var gdsStock = '${view.gdsStock}';
 									
-									if(plusNum > ${view.gdsStock}) {
+									if(plusNum > gdsStock) {
 										$(".numBox").val(num);
 									} else {
 										$(".numBox").val(plusNum);
@@ -218,7 +219,41 @@
 							</script>
 						</p>
 						<p class="addToCart">
-							<button type="button">카트에 담기</button>
+							<button type="button" class="btnAddCart">카트에 담기</button>
+							
+							<script type="text/javascript">
+								$(".btnAddCart").click(function(){
+									var gdsNum = $("#gdsNum").val();
+									var cartStock = $(".numBox").val();
+									
+									console.log("gdsNum : " + gdsNum);
+									console.log("cartStock : " + cartStock);
+									
+									// cartVO 형태로 데이터 생성
+									var data = {
+											gdsNum : gdsNum,
+											cartStock : cartStock
+									};
+									
+									$.ajax({
+										url : "/shop/view/addCart",
+										type : "post",
+										data : data,
+										success : function(result){
+											if(result == 1){
+												alert("카트에 담기 성공");
+												$(".numBox").val("1");
+											} else {
+												alert("회원만 사용 할 수 있습니다.");
+												$(".numBox").val("1");
+											}
+										},
+										error : function(){
+											alert("카트에 담기 실패");	// 세션이 다 되어서 로그인이 풀렸거나, 로그인을 안한 사용자
+										}
+									});
+								});
+							</script>
 						</p>
 					</div>
 					

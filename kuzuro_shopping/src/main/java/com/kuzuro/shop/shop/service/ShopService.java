@@ -3,6 +3,8 @@ package com.kuzuro.shop.shop.service;
 import java.util.List;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
+import com.kuzuro.shop.shop.domain.CartListVO;
+import com.kuzuro.shop.shop.domain.CartVO;
 import com.kuzuro.shop.shop.domain.ReplyListVO;
 import com.kuzuro.shop.shop.domain.ReplyVO;
 
@@ -28,4 +30,10 @@ public interface ShopService {
 	
 	// 상품 소감(댓글) 수정
 	public void modifyReply(ReplyVO reply) throws Exception;
+	
+	// 카트 담기
+	public void addCart(CartVO cart) throws Exception;
+	
+	// 카트 리스트
+	public List<CartListVO> cartList(String userId) throws Exception;
 }

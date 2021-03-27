@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kuzuro.shop.admin.domain.GoodsViewVO;
 import com.kuzuro.shop.member.domain.MemberVO;
+import com.kuzuro.shop.shop.domain.CartListVO;
+import com.kuzuro.shop.shop.domain.CartVO;
 import com.kuzuro.shop.shop.domain.ReplyListVO;
 import com.kuzuro.shop.shop.domain.ReplyVO;
 import com.kuzuro.shop.shop.service.ShopService;
@@ -132,5 +134,37 @@ public class ShopController {
 		}
 		
 		return result;
+	}
+	
+	// 카트 담기
+	@ResponseBody
+	@RequestMapping(value = "/view/addCart", method = RequestMethod.POST)
+	public int addCart(CartVO cart, HttpSession session) throws Exception {
+		logger.info("addCart");
+		
+		int result = 0;
+		
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		if(member != null) {
+			cart.setUserId(member.getUserId());
+			service.addCart(cart);
+			result = 1;
+		}
+		
+		return result;
+	}
+	
+	// 카트 리스트
+	@RequestMapping(value = "/cartList", method = RequestMethod.GET)
+	public void getCartList(HttpSession session, Model model) throws Exception {
+		logger.info("getCartList");
+		
+		MemberVO member = (MemberVO) session.getAttribute("member");
+		String userId = member.getUserId();
+		
+		List<CartListVO> cartList = null;
+		cartList = service.cartList(userId);
+		
+		model.addAttribute("cartList", cartList);
 	}
 }

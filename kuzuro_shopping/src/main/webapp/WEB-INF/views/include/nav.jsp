@@ -11,6 +11,7 @@
 		<c:if test="${member.verify == 9}">
 			<li><a href="/admin/index">관리자 화면</a></li>
 		</c:if>
+		<li><a href="/shop/cartList">장바구니</a></li>
 		<li><a href="/member/signout">로그아웃</a></li>
 	</c:if>
 </ul>
